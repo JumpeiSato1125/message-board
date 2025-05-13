@@ -1,0 +1,57 @@
+@charset "UTF-8";
+body {
+	background-image: url('/images/background-detail.png');
+}
+
+.thread-list {
+  margin-top: 20px;
+  width:932px;
+}
+
+.thread-list .thread-item {
+  background: rgba(240, 248, 255, 0.85); /* AliceBlueの半透明背景 */
+  margin-bottom: 15px;
+  width: 932px;
+  padding: 10px;
+  border: 1px solid #aad4f5; /* 淡い青で縁取り */
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.thread-date {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.thread-main {
+  display: flex;
+}
+
+.thumbnail img {
+  width: 100px;
+  height: 75px;
+  background: #e0f0ff; /* 明るい青で背景統一 */
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  border: 1px solid #d0e7ff;
+  border-radius: 4px;
+}
+
+.thread-info a {
+  color: #007acc; /* 淡いブルー */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.thread-info a:hover {
+  text-decoration: underline;
+}
+
+.thread-stats {
+  margin-top: 10px;
+  color: #555;
+}

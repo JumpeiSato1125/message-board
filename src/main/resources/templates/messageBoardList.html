@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>掲示板一覧画面</title>
+	<link rel="stylesheet" th:href="@{/css/messageboardcommon.css}" />
+	<link rel="stylesheet" th:href="@{/css/messageboardlist.css}" />
+</head>
+
+<body>
+	<header class="site-header">
+		<div class="logo">
+			<a th:href="@{/messageBoard/index}">
+				<img th:src="@{/images/messageboard_logo.png}" alt="MessageBoard ロゴ" class="logo-image">
+			</a>
+		</div>
+		<nav class="nav">
+			<a th:href="@{/logout}">Log Out</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<section class="left-column">
+			<nav class="breadcrumb">
+				<a th:href="@{/messageBoard/index}">掲示板トップ</a> &gt;
+				<div th:if="${mode == 'list'}">
+					<span th:text="スレッド一覧（一覧）"></span>
+				</div>
+				<div th:if="${mode == 'search'}">
+					<span th:text="スレッド一覧（検索）"></span>
+				</div>
+				<div th:if="${mode == 'category'}">
+					<span th:text="スレッド一覧（カテゴリ）"></span>
+				</div>
+			</nav>
+			<div class="margin-bottom align-right">
+				<form th:action="@{/messageBoard/list/search}" method="get">
+					検索：<input type="text" name="searchText" placeholder="掲示板を検索">
+					<button type="submit">検索</button>
+				</form>
+			</div>
+
+			<div class="thread-list">
+				<!-- スレッド -->
+				<div class="thread-item" th:if="${mbLists.isEmpty()}">
+					<p th:text="スレッドがありませんでした"></p>
+				</div>
+				<div class="thread-item" th:each=" mbList : ${mbLists} ">
+					<div th:text="${mbList.createdAt}" class="thread-date"></div>
+					<div class="thread-main">
+						<div class="thumbnail">
+							<img class="image" th:src="@{${mbList.thumbnailPath}}" alt="Image" />
+						</div>
+						<div class="thread-info">
+							<a th:href="@{/messageBoard/detail/{threadId}(threadId=${mbList.id})}"
+								th:text="${mbList.title}"></a>
+							<div class="thread-stats">
+								<span th:text="書き込み数 + ${mbList.viewCount}"></span>
+								<span th:text="いいね総数 + ${mbList.likeAllCount}"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div th:unless="${mbLists.isEmpty()}" class="pagination">
+				<ul>
+					<!--最初のページ-->
+					<li th:if="${mbLists.number > 2}">
+						<div th:if="${mode == 'list'}">
+							<a th:href="@{/messageBoard/list/0}">1</a>
+						</div>
+						<div th:if="${mode == 'search'}">
+							<a th:href="@{/messageBoard/list/search/{searchText}/0(searchText=${searchText})}">1</a>
+						</div>
+						<div th:if="${mode == 'category'}">
+							<a th:href="@{/messageBoard/list/category/{categoryId}/0(categoryId=${categoryId})}">1</a>
+						</div>
+					</li>
+					<!--省略記号-->
+					<li th:if="${mbLists.number > 3}"><span>…</span></li>
+					<!--中央のページ番号-->
+					<li th:each="i : ${#numbers.sequence((mbLists.number - 2) < 0 ? 0 : mbLists.number - 2,
+						(mbLists.number + 2) >= mbLists.totalPages ? mbLists.totalPages - 1 : mbLists.number + 2)}"
+						th:classappend="${i == mbLists.number} ? 'active'">
+						<div th:if="${mode == 'list'}">
+							<a th:href="@{/messageBoard/list/{page}(page=${i})}" th:text="${i + 1}"></a>
+						</div>
+						<div th:if="${mode == 'search'}">
+							<a th:href="@{/messageBoard/list/search/{searchText}/{page}(searchText=${searchText}, page=${i})}"
+								th:text="${i + 1}"></a>
+						</div>
+						<div th:if="${mode == 'category'}">
+							<a th:href="@{/messageBoard/list/category/{categoryId}/{page}(categoryId=${categoryId}, page=${i})}"
+								th:text="${i + 1}"></a>
+						</div>
+
+					</li>
+					<!--省略記号-->
+					<li th:if="${mbLists.number < mbLists.totalPages - 4}"><span>…</span></li>
+					<!--最後のページ-->
+					<li th:if="${mbLists.number < mbLists.totalPages - 3}">
+						<div th:if="${mode == 'list'}">
+							<a th:href="@{/messageBoard/list/{page}page=${mbLists.totalPages - 1})}"
+								th:text="${mbLists.totalPages}"></a>
+						</div>
+						<div th:if="${mode == 'search'}">
+							<a th:href="@{/messageBoard/list/search/{searchText}/{page}(searchText=${searchText}, 
+								page=${mbLists.totalPages - 1})}" th:text="${mbLists.totalPages}"></a>
+						</div>
+						<div th:if="${mode == 'category'}">
+							<a th:href="@{/messageBoard/list/category/{categoryId}/{page}(categoyId=${categoryId}, 
+								page=${mbLists.totalPages - 1})}" th:text="${mbLists.totalPages}"></a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</section>
+
+		<div class="sidebar">
+			<aside class="right-top-column">
+				<p>書き込みランキング</p>
+				<div class="ranking" th:each=" postCountMbList : ${postCountMbLists} ">
+					<a th:href="@{/messageBoard/detail/{threadId}(threadId=${postCountMbList.id})}"
+						th:text="${postCountMbList.title}"></a>
+				</div>
+			</aside>
+			<aside class="right-bottom-column">
+				<div class="categories">カテゴリから検索</div>
+				<div th:each=" categoryMbList : ${categoryMbLists}">
+					<a th:href="@{/messageBoard/list/category/{categoryId}(categoryId=${categoryMbList.categoryId})}"
+						th:text="${categoryMbList.categoryName}"></a>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	<footer class="site-footer">
+		&copy; 2025 Jumpei Sato. All rights reserved.
+	</footer>
+</body>
+
+</html>

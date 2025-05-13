@@ -1,0 +1,73 @@
+@charset "UTF-8";
+.thread-form {
+    background-color: #e6f3ff; /* さらに薄い水色 */
+    padding: 20px;
+    border: 1px solid #4fa3d1; /* 少し濃い水色 */
+    width: 932px;
+    border-radius: 8px; /* 少し丸みをつける */
+}
+
+.thread-form h2 {
+    margin-bottom: 20px;
+    color: #00796b; /* 濃い緑色 */
+}
+
+.form-group {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-group label {
+    width: 140px;
+    padding-top: 8px;
+    color: #00796b;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.form-group-item {
+    flex-grow: 1;
+}
+
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    background-color: #ffffff;
+    border: 1px solid #4fa3d1;
+    color: #00796b;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 4px;
+    color: #00796b;
+}
+
+.form-actions {
+    text-align: center;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    background-color: #4fa3d1; /* 濃い水色 */
+    border: 1px solid #4fa3d1;
+    color: #ffffff; /* 白 */
+    cursor: pointer;
+    border-radius: 4px; /* 丸みをつける */
+    font-size: 16px;
+    opacity: 0.9; /* 少し透明度を加える */
+}
+
+.form-actions button:hover {
+    background-color: #005b99; /* 濃い青 */
+    border-color: #005b99;
+    color: #ffffff;
+}

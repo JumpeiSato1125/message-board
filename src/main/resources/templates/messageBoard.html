@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>掲示板TOP</title>
+	<link rel="stylesheet" th:href="@{/css/messageboardcommon.css}" />
+	<link rel="stylesheet" th:href="@{/css/messageboardtop.css}" />
+</head>
+
+
+<body>
+	<header class="site-header">
+		<div class="logo">
+			<a th:href="@{/messageBoard/index}">
+				<img th:src="@{/images/messageboard_logo.png}" alt="MessageBoard ロゴ" class="logo-image">
+			</a>
+		</div>
+		<nav class="nav">
+			<a th:href="@{/logout}">Log Out</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<section class="left-column">
+			<div class="heading">
+				<h2>新着スレッド</h2>
+				<form th:action="@{/messageBoard/list/search}" method="get">
+					検索：<input type="text" name="searchText" placeholder="掲示板を検索">
+					<button type="submit">検索</button>
+				</form>
+			</div>
+			<div class="threads-grid">
+				<div class="thread-item" th:each=" newMbList : ${newMbLists} ">
+					<img th:src="@{${newMbList.thumbnailPath}}" alt="Image" />
+					<a th:href="@{/messageBoard/detail/{threadId}(threadId=${newMbList.id})}"
+						th:text="${newMbList.title}"></a>
+				</div>
+			</div>
+			<div class="align-center">
+				<form th:action="@{/messageBoard/list}" method="get">
+					<button type="submit">もっと見る</button>
+				</form>
+			</div>
+			<div class="align-right">
+				<form th:action="@{/messageBoard/threads/create}" method="get">
+					<button type="submit">スレッドを作成する</button>
+				</form>
+			</div>
+
+			<h2>人気記事</h2>
+			<div class="popular-posts" th:each=" likeCountMbList : ${likeCountMbLists} ">
+				<a th:href="@{/messageBoard/detail/{threadId}(threadId=${likeCountMbList.id})}"
+					th:text="${likeCountMbList.title}"></a>
+			</div>
+		</section>
+
+		<div class="sidebar">
+			<aside class="right-top-column">
+				<p th:text="書き込みランキング"></p>
+				<div class="ranking" th:each="postCountMbList, iterStat : ${postCountMbLists}">
+					<span th:text="${iterStat.index + 1} + '位: '"></span> <!-- 順位表示 -->
+					<a th:href="@{/messageBoard/detail/{threadId}(threadId=${postCountMbList.id})}"
+						th:text="${postCountMbList.title}"></a>
+				</div>
+			</aside>
+			<aside class="right-bottom-column">
+				<p th:text="カテゴリから検索"></p>
+				<div th:each=" categoryMbList : ${categoryMbLists}">
+					<a th:href="@{/messageBoard/list/category/{categoryId}(categoryId=${categoryMbList.categoryId})}"
+						th:text="${categoryMbList.categoryName}"></a>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	<footer class="site-footer">
+		&copy; 2025 Jumpei Sato. All rights reserved.
+	</footer>
+</body>
+
+</html>

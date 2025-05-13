@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>スレッド作成画面</title>
+	<link rel="stylesheet" th:href="@{/css/messageboardcommon.css}" />
+	<link rel="stylesheet" th:href="@{/css/creatthread.css}" />
+</head>
+
+<body>
+	<header class="site-header">
+		<div class="logo">
+			<a th:href="@{/messageBoard/index}">
+				<img th:src="@{/images/messageboard_logo.png}" alt="MessageBoard ロゴ" class="logo-image">
+			</a>
+		</div>
+		<nav class="nav">
+			<a th:href="@{/logout}">Log Out</a>
+		</nav>
+	</header>
+	<main class="container">
+		<section class="left-column">
+			<nav class="breadcrumb">
+				<a th:href="@{/messageBoard/index}">掲示板トップ</a> &gt;
+				<span th:text="スレッド作成画面"></span>
+			</nav>
+			<div class="thread-form">
+				<h2>スレッドを作成</h2>
+				<ul th:if="${errorList != null}">
+					<li th:each="error : ${errorList}" th:text="${error}"></li>
+				</ul>
+				<form th:action="@{/messageBoard/threads/create}" method="post" enctype="multipart/form-data"
+					th:object="${createThreadBean}">
+					<div class="form-group">
+						<label for="title">スレッドタイトル</label>
+						<div class="form-group-item">
+							<textarea th:field="*{title}" maxlength="50" required></textarea>
+							<div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error-message"></div>
+							<small>必須　50文字まで</small>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="description">スレッド説明</label>
+						<div class="form-group-item">
+							<textarea th:field="*{description}" maxlength="255" required></textarea>
+							<div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+								class="error-message"></div>
+							<small>必須　255文字まで</small>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="thumbnail">サムネイル</label>
+						<div class="form-group-item">
+							<input type="file" th:field="*{file}" />
+							<div th:if="${#fields.hasErrors('file')}" th:errors="*{file}" class="error-message"></div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="category">カテゴリ</label>
+						<div class="form-group-item">
+							<select th:field="*{categoryId}" required>
+								<option th:each="categoryMbList : ${categoryMbLists}"
+									th:value="${categoryMbList.categoryId}" th:text="${categoryMbList.categoryName}">
+								</option>
+							</select>
+							<div th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"
+								class="error-message"></div>
+							<small>必須</small>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button type="submit">スレッドを作成する</button>
+					</div>
+				</form>
+			</div>
+		</section>
+
+		<div class="sidebar">
+			<aside class="right-top-column">
+				<p>書き込みランキング</p>
+				<div class="ranking" th:each=" postCountMbList : ${postCountMbLists} ">
+					<a th:href="@{/messageBoard/detail/{threadId}(threadId=${postCountMbList.id})}"
+						th:text="${postCountMbList.title}"></a>
+				</div>
+			</aside>
+			<aside class="right-bottom-column">
+				<div class="categories">カテゴリから検索</div>
+				<div th:each=" categoryMbList : ${categoryMbLists}">
+					<a th:href="@{/messageBoard/list/category/{categoryId}(categoryId=${categoryMbList.categoryId})}"
+						th:text="${categoryMbList.categoryName}"></a>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	<footer class="site-footer">
+		&copy; 2025 Jumpei Sato. All rights reserved.
+	</footer>
+</body>
+
+</html>
