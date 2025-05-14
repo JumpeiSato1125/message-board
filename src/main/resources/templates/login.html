@@ -11,21 +11,18 @@
 <body>
 	<div class="login-box">
 		<h2>ログインしてください</h2>
-		<form th:action="@{/login}" method="post">
+		<form th:action="@{/login}" method="post" th:object="${loginBean}">
 			<label>ログインID：</label>
-			<input type="text" name="id" th:value="${loginBean.id}" />
+			<input type="text" th:field="*{id}" />
+			<div th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="error-message"></div>
 			<label>パスワード：</label>
-			<input type="password" name="password" th:value="${loginBean.password}" />
+			<input type="text" th:field="*{password}" />
+			<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></div>
+			<div th:if="*{!errorList.isEmpty()}" th:each="error : *{errorList}">
+				<div th:text="${error}" class="error-message"></div>
+			</div>
 			<input type="submit" value="ログイン" />
 		</form>
-
-		<div th:unless="${loginBean.getErrorList().isEmpty()}">
-			<div th:each="errorList : ${loginBean.getErrorList()}">
-				<p class="error-message" th:text="${errorList}"></p>
-			</div>
-		</div>
-
-		<p th:text="${msg}"></p>
 	</div>
 </body>
 
