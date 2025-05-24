@@ -1,9 +1,8 @@
 services:
   - type: web
     name: message-board
-    runtime: java
-    buildCommand: "./mvnw clean package -DskipTests"
-    startCommand: "java -jar target/message-board-0.0.1-SNAPSHOT.jar"
+    runtime: docker
+    dockerfilePath: Dockerfile
     envVars:
       - key: JDBC_DATABASE_URL
         value: jdbc:mysql://trolley.proxy.rlwy.net:18820/railway?useSSL=false&serverTimezone=Asia/Tokyo
