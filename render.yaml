@@ -1,7 +1,7 @@
 services:
   - type: web
     name: message-board
-    env: java
+    runtime: java
     buildCommand: "./mvnw clean package -DskipTests"
     startCommand: "java -jar target/message-board-0.0.1-SNAPSHOT.jar"
     envVars:
