@@ -1,14 +1,12 @@
-# Java 17 のベースイメージ
-FROM eclipse-temurin:17-jdk
-
-# 作業ディレクトリ
+# Mavenでビルド
+FROM maven:3.9.0-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
 
-# jar ファイルをコピー（ファイル名は変更可能）
-COPY target/message-board-0.0.1-SNAPSHOT.jar app.jar
-
-# ポートを指定
+# 実行用イメージ
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/message-board-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# アプリ起動
 ENTRYPOINT ["java", "-jar", "app.jar"]
