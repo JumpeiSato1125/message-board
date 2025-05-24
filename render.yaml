@@ -1,3 +1,5 @@
+blueprintName: message-board
+
 services:
   - type: web
     name: message-board
